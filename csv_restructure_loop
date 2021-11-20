@@ -1,0 +1,40 @@
+import os
+#import arcpy
+import pandas as pd
+
+path_data = "E:\\1_Yale_YSE\\1_Academics\\2021 Fall\Work-Study\YaoLab\Loblolly pine yield\Loblolly pine yield"
+
+path_all_csv = os.listdir(path_data)
+# df_in_vars = [ 'df_in_%s' %i for i in [50,53,55,56]+list(range(60,106))]
+# df_between_vars = [ 'df_between_%s' %i for i in [50,53,55,56]+list(range(60,106))]
+# df_out_vars=[ 'df_out_%s' %i for i in [50,53,55,56]+list(range(60,106))]
+df_out = []
+df_out = pd.DataFrame(df_out)
+#df_example = pd.read_csv(os.path.join(path_data, path_all_csv[0]))
+df_ex_cloumns=["Ages","Density","Height","BArea","Vol_ob","DryWeight","Dq","Pulp","SawTimber","Veneer","GW_Pulp","GW_Sawtimber","GW_Venner"]
+print(path_all_csv)
+df_columns = ['%s' % i for i in list(range(1, 26))]
+
+for y in list(range(1, 13)):
+    df_in_vars=[]
+    df_out = []
+    df_out=pd.DataFrame(df_out)
+    for single_csv in path_all_csv:
+        # for i in list(range(0,50)):
+        df_in_vars = pd.read_csv(os.path.join(path_data, single_csv))
+        # print(df_in_vars[i].head())
+        # print(df_in_vars[i].iloc[:, 1].T)
+        # if df_out==[]:
+        #    df_out=df_in_vars[i].iloc[:, 1].T
+        # else:
+        df_out = df_out.append(df_in_vars.iloc[:, y].T)
+        # print(df_out)
+        # print(df_example.columns[1][0:2])
+        # df_out.info()
+    path_out = "E:\\1_Yale_YSE\\1_Academics\\2021 Fall\Work-Study\YaoLab\Loblolly pine yield\\"
+    #print(df_columns)
+    df_out.columns = df_columns
+    df_out.index = [50, 53, 55, 56] + list(range(60, 106))
+    #print(df_out.head())
+    df_out.to_csv(path_out + df_ex_cloumns[y] + ".csv")
+    print(y)
