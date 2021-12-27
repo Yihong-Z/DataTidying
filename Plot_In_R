@@ -1,0 +1,44 @@
+#批量绘制生长量和年份的关系图
+#示例 DXAA04_Growth_Baihua.csv
+
+rm(list=ls())
+
+library(nlme)       # for gls()
+library(nnet)       # for class.ind function
+
+data=read.csv(file.choose(),header=T,skip=1,na.strings = c("","NA"))
+rowcount=nrow(data)
+columncount=ncol(data)
+number=columncount/2
+#print(columncount)
+end_year=2016
+start_year=end_year-rowcount+1
+growth=seq(from=2,to=columncount,by=2)
+min_growth=min(data,na.rm=TRUE)
+max_growth=max(data[,growth],na.rm=TRUE)
+
+# x=data[1]
+# y=data[2]
+range=c(1:number)
+# plot(x[2:20,],y[2:20,])
+
+for (a in range){
+xn=2*a-1
+print(xn)
+yn=2*a
+x=data[xn]
+y=data[yn]
+plot(x[2:rowcount,],y[2:rowcount,],xlab="",ylab="",main="",
+     xlim=c(start_year,end_year),ylim=c(min_growth-.005,max_growth+0.005))
+abline(lm(y[2:rowcount,]~x[2:rowcount,]))
+title(xlab=list(expression("Year")))
+title(ylab=list(expression("Tree Ring Growth")))
+title(main=sprintf('%s',colnames(data)[2*a]))
+
+print(sprintf("F:\\Test\\%s.jpg",colnames(data)[2*a])) #以样芯号为文件名
+jpeg(file=sprintf("F:\\Test\\%s.jpg",colnames(data)[2*a])) #输出路径自定义一下
+dev.off()
+
+}
+
+
